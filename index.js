@@ -1,21 +1,20 @@
 const express = require("express");
 const mongoose = require('mongoose');
+const config = require("config");
+const connectDB = require('./startup/db');
+var cors = require("cors");
 
-mongoose
-.connect('mongodb+srv://<username>:<password>@<clustername>.6si6q.mongodb.net/<dbname>?retryWrites=true&w=majority',
-{ useNewUrlParser: true, useUnifiedTopology: true })
- .then(() => console.log('Connected to MongoDB...'))
- .catch((err) => console.log(`Could not connect to MongoDB. ERROR: ${err}`));
-
+connectDB();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.listen(3000, function (){
-    console.log("Server started. Listening on port 3000.");
+app.listen(5000, function (){
+    console.log("Server started. Listening on port 5000.");
 });
 
 app.get("/", (req, res) => {

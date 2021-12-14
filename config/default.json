@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://<username>:<password>@<clustername>.6si6q.mongodb.net/<dbname>?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://Sullyryan:Mrsully1@cluster1.qas7z.mongodb.net/AdventureCapstone?retryWrites=true&w=majority"
    }
    
