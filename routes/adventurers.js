@@ -43,4 +43,27 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error);
+  const adventurer = await Adventurer.findByIdAndUpdate(
+  req.params.id,
+  {
+  firstName: req.body.firstName,
+  lastName: req.body.lastName
+  },
+  { new: true }
+  );
+  if (!adventurer)
+  return res.status(400).send(`The adventurer with id "${req.params.id}" d
+ oes not exist.`);
+  await adventurer.save();
+  return res.send(adventurer);
+  } catch (ex) {
+  return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+ });
+ 
+
 module.exports = router;
