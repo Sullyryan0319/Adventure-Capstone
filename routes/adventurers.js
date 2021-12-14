@@ -64,6 +64,19 @@ router.put('/:id', async (req, res) => {
   return res.status(500).send(`Internal Server Error: ${ex}`);
   }
  });
+
+ router.delete('/:id', async (req, res) => {
+  try {
+ 
+  const adventurer = await Adventurer.findByIdAndRemove(req.params.id);
+  if (!adventurer)
+  return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
+  return res.send(adventurer);
+  } catch (ex) {
+  return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+ });
+ 
  
 
 module.exports = router;
