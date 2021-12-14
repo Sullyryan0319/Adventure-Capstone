@@ -11,19 +11,17 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
- 
-  const adventurer = await Adventurer.findById(req.params.id);
-  if (!adventurer)
-  return res.status(400).send(`The adventurer with id "${req.params.id}" d
+    const adventurer = await Adventurer.findById(req.params.id);
+    if (!adventurer)
+      return res.status(400).send(`The adventurer with id "${req.params.id}" d
  oes not exist.`);
-  return res.send(adventurer);
+    return res.send(adventurer);
   } catch (ex) {
-  return res.status(500).send(`Internal Server Error: ${ex}`);
+    return res.status(500).send(`Internal Server Error: ${ex}`);
   }
- });
- 
+});
 
 router.post("/", async (req, res) => {
   try {
@@ -43,40 +41,39 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error);
-  const adventurer = await Adventurer.findByIdAndUpdate(
-  req.params.id,
-  {
-  firstName: req.body.firstName,
-  lastName: req.body.lastName
-  },
-  { new: true }
-  );
-  if (!adventurer)
-  return res.status(400).send(`The adventurer with id "${req.params.id}" d
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error);
+    const adventurer = await Adventurer.findByIdAndUpdate(
+      req.params.id,
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      },
+      { new: true }
+    );
+    if (!adventurer)
+      return res.status(400).send(`The adventurer with id "${req.params.id}" d
  oes not exist.`);
-  await adventurer.save();
-  return res.send(adventurer);
+    await adventurer.save();
+    return res.send(adventurer);
   } catch (ex) {
-  return res.status(500).send(`Internal Server Error: ${ex}`);
+    return res.status(500).send(`Internal Server Error: ${ex}`);
   }
- });
+});
 
- router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
- 
-  const adventurer = await Adventurer.findByIdAndRemove(req.params.id);
-  if (!adventurer)
-  return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
-  return res.send(adventurer);
+    const adventurer = await Adventurer.findByIdAndRemove(req.params.id);
+    if (!adventurer)
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
+    return res.send(adventurer);
   } catch (ex) {
-  return res.status(500).send(`Internal Server Error: ${ex}`);
+    return res.status(500).send(`Internal Server Error: ${ex}`);
   }
- });
- 
- 
+});
 
 module.exports = router;
