@@ -48,6 +48,8 @@ router.post("/", async (req, res) => {
 
 router.post("/:id/activityList", async (req, res) => {
   try {
+    debugger
+    console.log(req.params)
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
       return res

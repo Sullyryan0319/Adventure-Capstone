@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { activitySchema } = require("./activity");
-const { Lodging, lodgingSchema } = require("./lodging");
+const { lodgingSchema } = require("./lodging");
 
 const venueSchema = new mongoose.Schema({
   name: { type: String, required: true },

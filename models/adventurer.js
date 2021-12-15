@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { activitySchema } = require("./activity");
-// const { Lodging, lodgingSchema } = require("./lodging");
+const { lodgingSchema } = require("./lodging"); 
 
 const adventurerSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -9,7 +9,7 @@ const adventurerSchema = new mongoose.Schema({
   email: {    type: String, unique: true, required: true, minlength: 5, maxlength: 255},
   password: { type: String, required: true, maxlength: 200, minlength: 5 },
   activityList: { type: [activitySchema], default: [] },
-//   lodging: { type: [lodgingSchema], default: [] },
+  lodging: { type: [lodgingSchema], default: [] },
 
 });
 

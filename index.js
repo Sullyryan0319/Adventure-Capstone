@@ -4,6 +4,7 @@ const config = require("config");
 const connectDB = require('./startup/db');
 var cors = require("cors");
 const adventurers = require('./routes/adventurers');
+const activities = require('./routes/activities');
 const app = express();
 
 connectDB();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/adventurers', adventurers);
+app.use('/api/activities', activities);
 
 
 const port = process.env.PORT || 5000;
