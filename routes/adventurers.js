@@ -1,4 +1,5 @@
 const { Adventurer, validate } = require("../models/adventurer");
+const { Activity} = require("../models/activity");
 const express = require("express");
 const router = express.Router();
 
@@ -31,11 +32,35 @@ router.post("/", async (req, res) => {
     const adventurer = new Adventurer({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.email,
+      activityList: req.body.activityList,
+      lodging: req.body.lodging
     });
 
     await adventurer.save();
 
     return res.send(adventurer);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.post("/adventurers/:id/activitylist/:id", async (req, res) => {
+  try {
+    const adventurer = await Adventurer.findById(req.params.userId);
+    if (!adventurer)
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.userId}" does not exist.`);
+    const activity = await Activity.findById(req.params.activityId);
+    if (!activity)
+      return res
+        .status(400)
+        .send(`The activity with id "${req.params.productId}" does not exist.`);
+    user.activityList.push(activity);
+    await adventurer.save();
+    return res.send(adventurer.activityList);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
