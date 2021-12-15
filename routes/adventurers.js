@@ -16,8 +16,7 @@ router.get("/:id", async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" d
- oes not exist.`);
+      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
     return res.send(adventurer);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
