@@ -1,12 +1,12 @@
-const { Activity, validateActivity } = require("../models/activity");
+const { Lodging, validateLodging } = require("../models/lodging");
 const express = require("express");
 const router = express.Router();
 
 
 router.get("/", async (req, res) => {
     try {
-      const activities = await Activity.find();
-      return res.send(activities);
+      const lodgingOptions = await Lodging.find();
+      return res.send(lodgingOptions);
     } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
     }
@@ -14,10 +14,10 @@ router.get("/", async (req, res) => {
   
   router.get("/:id", async (req, res) => {
     try {
-      const activity = await Activity.findById(req.params.id);
-      if (!activity)
-        return res.status(400).send(`The activity with id "${req.params.id}" does not exist.`);
-      return res.send(activity);
+      const lodging = await Lodging.findById(req.body.id);
+      if (!lodging)
+        return res.status(400).send(`The lodging option with id "${req.body.id}" does not exist.`);
+      return res.send(lodging);
     } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
     }
@@ -25,17 +25,18 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-      const { error } = validateActivity(req.body);
+      const { error } = validateLodging(req.body);
       if (error) return res.status(400).send(error);
   
-      const activity = new Activity({
+      const lodging = new Lodging({
         description: req.body.description,
-        participants: req.body.participants
+        occupancy: req.body.occupancy,
+        price: req.body.price
       });
   
-      await activity.save();
+      await lodging.save();
   
-      return res.send(activity);
+      return res.send(lodging);
     } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
     }

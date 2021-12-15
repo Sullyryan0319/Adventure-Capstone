@@ -8,8 +8,8 @@ const venueSchema = new mongoose.Schema({
   description: { type: String, required: true },
   email: {    type: String, unique: true, required: true, minlength: 5, maxlength: 255},
   password: { type: String, required: true, maxlength: 200, minlength: 5 },
-  activities: { type: [activitySchema], default: [] },
-  lodging: { type: [lodgingSchema], default: [] },
+  activities: [{ type: mongoose.Types.ObjectId}],
+  lodging: [{ type: mongoose.Types.ObjectId}]
 
 });
 

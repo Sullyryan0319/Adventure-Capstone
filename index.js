@@ -5,6 +5,7 @@ const connectDB = require('./startup/db');
 var cors = require("cors");
 const adventurers = require('./routes/adventurers');
 const activities = require('./routes/activities');
+const lodgingOptions = require('./routes/lodgingOptions');
 const app = express();
 
 connectDB();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/adventurers', adventurers);
 app.use('/api/activities', activities);
+app.use('/api/lodgingOptions', lodgingOptions);
 
 
 const port = process.env.PORT || 5000;

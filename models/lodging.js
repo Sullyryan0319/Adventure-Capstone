@@ -5,7 +5,7 @@ const { boolean } = require("joi");
 const lodgingSchema = new mongoose.Schema({
   description: { type: String, required: true, minlength: 5, maxlength: 250 },
   occupancy: { type: Number, default: 0 },
-  utilities: {type: Boolean, default: false}
+  price: {type: Number, default: 0}
 });
 
 const Lodging = mongoose.model("Lodging", lodgingSchema);
@@ -13,8 +13,8 @@ const Lodging = mongoose.model("Lodging", lodgingSchema);
 function validateLodging(lodging) {
   const schema = Joi.object({
     description: Joi.string().required(),
-    occupancy: Joi.number(),
-    utilities: Joi.boolean()
+    maxOccupancy: Joi.number(),
+    price: Joi.number()
   });
   return schema.validate(lodging);
 }

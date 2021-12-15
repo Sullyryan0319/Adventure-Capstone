@@ -55,12 +55,12 @@ router.post("/:id/activityList", async (req, res) => {
       return res
         .status(400)
         .send(`The adventurer with id "${req.params.id}" does not exist.`);
-    const activity = await Activity.findById(req.params.id);
+    const activity = await Activity.findById(req.body.id);
     if (!activity)
       return res
         .status(400)
-        .send(`The activity with id "${req.params.id}" does not exist.`);
-    user.activityList.push(activity);
+        .send(`The activity with id "${req.body.id}" does not exist.`);
+    adventurer.activityList.push(activity);
     await adventurer.save();
     return res.send(adventurer.activityList);
   } catch (ex) {
@@ -81,8 +81,7 @@ router.put("/:id", async (req, res) => {
       { new: true }
     );
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" d
- oes not exist.`);
+      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
     await adventurer.save();
     return res.send(adventurer);
   } catch (ex) {
