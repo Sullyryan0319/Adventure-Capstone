@@ -94,8 +94,6 @@ router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
     const adventurer = await Adventurer.findById(req.params.id)
     if (!adventurer)
       return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
-    // const venue = await Venue.findById(req.params.venueId)
-    // const activity = await venue.activities.id(req.params.activityId).then(()=> 
     adventurer.activityList.push((req.params.activityId))
 
     await adventurer.save();

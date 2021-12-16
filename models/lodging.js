@@ -3,8 +3,9 @@ const Joi = require("joi");
 const { boolean } = require("joi");
 
 const lodgingSchema = new mongoose.Schema({
-  description: { type: String, required: true, minlength: 5, maxlength: 250 },
-  occupancy: { type: Number, default: 0 },
+  type: { type: String, required: true, minlength: 2, maxlength: 250 },
+  description: { type: String, required: true, minlength: 2, maxlength: 250 },
+  occupancy: { type: String, require: true },
   price: {type: Number, default: 0}
 });
 

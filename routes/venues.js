@@ -1,5 +1,6 @@
 const { Venue, validate } = require("../models/venue");
 const { Activity, validateActivity } = require("../models/activity");
+const { Lodging, validateLodging } = require("../models/lodging");
 const express = require("express");
 const router = express.Router();
 
@@ -12,10 +13,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const venue = await Venue.findById(req.params.id);
+    if (!venue)
+      return res
+        .status(400)
+        .send(`The venue with id "${req.params.id}" does not exist.`);
+    return res.send(venue);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error); 
+    if (error) return res.status(400).send(error);
 
     const venue = new Venue({
       name: req.body.name,
@@ -42,10 +56,10 @@ router.post("/:venueId/activities", async (req, res) => {
         .status(400)
         .send(`The venue with id "${req.params.venueId}" does not exist.`);
     const activity = new Activity({
-        description: req.body.description,
-        participants: req.body.participants,
-        price: req.body.price
-    })
+      description: req.body.description,
+      participants: req.body.participants,
+      price: req.body.price,
+    });
     venue.activities.push(activity);
     await venue.save();
     return res.send(venue);
@@ -55,23 +69,64 @@ router.post("/:venueId/activities", async (req, res) => {
 });
 
 router.post("/:venueId/lodginOptions", async (req, res) => {
+  try {
+    const venue = await Venue.findById(req.params.venueId);
+    if (!venue)
+      return res
+        .status(400)
+        .send(`The venue with id "${req.params.venueId}" does not exist.`);
+    const lodging = new Lodging({
+      type: req.body.type,
+      description: req.body.description,
+      occupancy: req.body.occupancy,
+      price: req.body.price,
+    });
+    venue.lodgingOptions.push(lodging);
+    await venue.save();
+    return res.send(venue);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error);
+    const venue = await Venue.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        email: req.body.email,
+        password: req.body.email,
+        activities: req.body.activities,
+        lodging: req.body.lodging,
+      },
+      { new: true }
+    );
+    if (!venue)
+      return res
+        .status(400)
+        .send(`The venue with id "${req.params.id}" does not exist.`);
+    await venue.save();
+    return res.send(venue);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
     try {
-      const venue = await Venue.findById(req.params.venueId);
+      const venue = await Adventurer.findByIdAndRemove(req.params.id);
       if (!venue)
         return res
           .status(400)
-          .send(`The venue with id "${req.params.venueId}" does not exist.`);
-      const lodging = new Lodging({
-          type: req.body.type,
-          description: req.body.description,
-          occupancy: req.body.occupancy,
-          price: req.body.price
-      })
-      venue.lodgingOptions.push(lodging);
-      await venue.save();
+          .send(`The venue with id "${req.params.id}" does not exist.`);
       return res.send(venue);
     } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
     }
   });
+  
 module.exports = router;
