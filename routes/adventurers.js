@@ -1,7 +1,7 @@
-const { Adventurer, validate } = require("../models/adventurer");
-const { Activity} = require("../models/activity");
-const { Venue} = require("../models/venue");
-const bcrypt = require('bcrypt');
+const { Adventurer, validateAdventurer } = require("../models/adventurer");
+const { Activity } = require("../models/activity");
+const { Venue } = require("../models/venue");
+const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
 
@@ -18,7 +18,9 @@ router.get("/:id", async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
     return res.send(adventurer);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -38,7 +40,7 @@ router.post("/", async (req, res) => {
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
       activityList: req.body.activityList,
-      lodging: req.body.lodging
+      lodging: req.body.lodging,
     });
 
     await adventurer.save();
@@ -49,23 +51,27 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.post("/:id/activityList", async (req, res) => {
+// router.post("/", async (req, res) => {
 //   try {
-//     debugger
-//     console.log(req.params)
-//     const adventurer = await Adventurer.findById(req.params.id);
-//     if (!adventurer)
-//       return res
-//         .status(400)
-//         .send(`The adventurer with id "${req.params.id}" does not exist.`);
-//     const activity = await Activity.findById(req.body.id);
-//     if (!activity)
-//       return res
-//         .status(400)
-//         .send(`The activity with id "${req.body.id}" does not exist.`);
-//     adventurer.activityList.push(activity);
+//     const { error } = validateAdventurer(req.body);
+//     if (error) return res.status(400).send(error.details[0].message);
+//     let adventurer = await Adventurer.findOne({ email: req.body.email });
+//     if (adventurer)
+//       return res.status(400).send("Adventurer already registered.");
+//     const adventurer = new Adventurer({
+//       firstName: req.body.firstName,
+//       lastName: req.body.lastName,
+//       email: req.body.email,
+//       password: await bcrypt.hash(req.body.password, salt),
+//       activityList: req.body.activityList,
+//       lodging: req.body.lodging,
+//     });
 //     await adventurer.save();
-//     return res.send(adventurer.activityList);
+//     return res.send({
+//       _id: adventurer._id,
+//       name: adventurer.name,
+//       email: adventurer.email,
+//     });
 //   } catch (ex) {
 //     return res.status(500).send(`Internal Server Error: ${ex}`);
 //   }
@@ -84,7 +90,9 @@ router.put("/:id", async (req, res) => {
       { new: true }
     );
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
     await adventurer.save();
     return res.send(adventurer);
   } catch (ex) {
@@ -94,14 +102,15 @@ router.put("/:id", async (req, res) => {
 
 router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
   try {
-    const adventurer = await Adventurer.findById(req.params.id)
+    const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
-    adventurer.activityList.push((req.params.activityId))
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
+    adventurer.activityList.push(req.params.activityId);
 
     await adventurer.save();
     return res.send(adventurer);
-
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
@@ -109,14 +118,15 @@ router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
 
 router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
   try {
-    const adventurer = await Adventurer.findById(req.params.id)
+    const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
-      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
-    adventurer.lodging.push((req.params.lodgingId))
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
+    adventurer.lodging.push(req.params.lodgingId);
 
     await adventurer.save();
     return res.send(adventurer);
-
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }

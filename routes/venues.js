@@ -93,6 +93,25 @@ router.post("/:venueId/lodginOptions", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    const { error } = validateVenue(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    let venue = await Venue.findOne({ email: req.body.email });
+    if (venue) return res.status(400).send("Venue already registered.");
+    venue = new Venue({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    await venue.save();
+    return res.send({ _id: venue._id, name: venue.name, email: venue.email });
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+
 // router.post("/:venueId/lodginOptions/reviews", async (req, res) => {
 //   try {
 //     const venue = await Venue.findById(req.params.venueId);
@@ -162,7 +181,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-      const venue = await Adventurer.findByIdAndRemove(req.params.id);
+      const venue = await Venue.findByIdAndRemove(req.params.id);
       if (!venue)
         return res
           .status(400)

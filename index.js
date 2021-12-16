@@ -7,6 +7,7 @@ const adventurers = require('./routes/adventurers');
 const activities = require('./routes/activities');
 const lodgingOptions = require('./routes/lodgingOptions');
 const venues = require('./routes/venues');
+const auth = require('./routes/auth');
 const app = express();
 
 connectDB();
@@ -19,6 +20,7 @@ app.use('/api/adventurers', adventurers);
 app.use('/api/activities', activities);
 app.use('/api/lodgingOptions', lodgingOptions);
 app.use('/api/venues', venues);
+app.use('/api/auth', auth);
 
 
 const port = process.env.PORT || 5000;
