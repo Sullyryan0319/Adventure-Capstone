@@ -1,6 +1,8 @@
 const { Venue, validate } = require("../models/venue");
 const { Activity, validateActivity } = require("../models/activity");
 const { Lodging, validateLodging } = require("../models/lodging");
+const { Review, validateReview } = require("../models/review");
+const bcrypt = require('bcrypt');
 const express = require("express");
 const router = express.Router();
 
@@ -31,11 +33,13 @@ router.post("/", async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
 
+    const salt = await bcrypt.genSalt(10);
+
     const venue = new Venue({
       name: req.body.name,
       description: req.body.description,
       email: req.body.email,
-      password: req.body.email,
+      password: await bcrypt.hash(req.body.password, salt),
       activities: req.body.activities,
       lodging: req.body.lodging,
     });
@@ -88,6 +92,46 @@ router.post("/:venueId/lodginOptions", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
+// router.post("/:venueId/lodginOptions/reviews", async (req, res) => {
+//   try {
+//     const venue = await Venue.findById(req.params.venueId);
+//     if (!venue)
+//       return res
+//         .status(400)
+//         .send(`The venue with id "${req.params.venueId}" does not exist.`);
+//     const lodging = new Lodging({
+//       type: req.body.type,
+//       description: req.body.description,
+//       occupancy: req.body.occupancy,
+//       price: req.body.price,
+//     });
+//     venue.lodgingOptions.push(lodging);
+//     await venue.save();
+//     return res.send(venue);
+//   } catch (ex) {
+//     return res.status(500).send(`Internal Server Error: ${ex}`);
+//   }
+// });
+
+// router.post("/:venueId/activities/:activityId/reviews", async (req, res) => {
+//   try {
+//     const venue = await Venue.findById(req.params.venueId);
+//     if (!venue)
+//       return res
+//         .status(400)
+//         .send(`The venue with id "${req.params.venueId}" does not exist.`);
+//     const review = new Review({
+//       text: req.body.text,
+//     });
+//     venue.activityId.reviews.push(review);
+//     await venue.save();
+//     return res.send(venue);
+//   } catch (ex) {
+//     return res.status(500).send(`Internal Server Error: ${ex}`);
+//   }
+// });
+
 
 router.put("/:id", async (req, res) => {
   try {

@@ -1,6 +1,7 @@
 const { Adventurer, validate } = require("../models/adventurer");
 const { Activity} = require("../models/activity");
 const { Venue} = require("../models/venue");
+const bcrypt = require('bcrypt');
 const express = require("express");
 const router = express.Router();
 
@@ -29,11 +30,13 @@ router.post("/", async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
 
+    const salt = await bcrypt.genSalt(10);
+
     const adventurer = new Adventurer({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      password: req.body.email,
+      password: await bcrypt.hash(req.body.password, salt),
       activityList: req.body.activityList,
       lodging: req.body.lodging
     });
