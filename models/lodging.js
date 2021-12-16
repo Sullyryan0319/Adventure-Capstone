@@ -12,8 +12,9 @@ const Lodging = mongoose.model("Lodging", lodgingSchema);
 
 function validateLodging(lodging) {
   const schema = Joi.object({
+    type: Joi.string().required(),
     description: Joi.string().required(),
-    maxOccupancy: Joi.number(),
+    occupancy: Joi.number(),
     price: Joi.number()
   });
   return schema.validate(lodging);

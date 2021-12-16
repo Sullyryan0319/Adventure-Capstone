@@ -1,5 +1,6 @@
 const { Adventurer, validate } = require("../models/adventurer");
 const { Activity} = require("../models/activity");
+const { Venue} = require("../models/venue");
 const express = require("express");
 const router = express.Router();
 
@@ -83,6 +84,23 @@ router.put("/:id", async (req, res) => {
       return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
     await adventurer.save();
     return res.send(adventurer);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
+  try {
+    const adventurer = await Adventurer.findById(req.params.id)
+    if (!adventurer)
+      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
+    // const venue = await Venue.findById(req.params.venueId)
+    // const activity = await venue.activities.id(req.params.activityId).then(()=> 
+    adventurer.activityList.push((req.params.activityId))
+
+    await adventurer.save();
+    return res.send(adventurer);
+
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }

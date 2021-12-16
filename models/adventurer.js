@@ -8,8 +8,8 @@ const adventurerSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: {    type: String, unique: true, required: true, minlength: 5, maxlength: 255},
   password: { type: String, required: true, maxlength: 200, minlength: 5 },
-  activityList: { type: [activitySchema], default: [] },
-  lodging: { type: [lodgingSchema], default: [] },
+  activityList: { type: [mongoose.Types.ObjectId]},
+  lodging: { type: [mongoose.Types.ObjectId]}
 
 });
 

@@ -30,7 +30,8 @@ router.post("/", async (req, res) => {
   
       const activity = new Activity({
         description: req.body.description,
-        participants: req.body.participants
+        participants: req.body.participants,
+        price: req.body.participants
       });
   
       await activity.save();
