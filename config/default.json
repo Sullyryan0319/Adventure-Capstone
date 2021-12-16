@@ -1,6 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://Sullyryan:Mrsully1@cluster1.qas7z.mongodb.net/AdventureCapstone?retryWrites=true&w=majority",
-    "jwtSecret": "ThisIsMySecret6312"
-
-   }
-   
