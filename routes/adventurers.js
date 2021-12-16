@@ -1,11 +1,12 @@
-const { Adventurer, validateAdventurer } = require("../models/adventurer");
+const { Adventurer, validate } = require("../models/adventurer");
 const { Activity } = require("../models/activity");
 const { Venue } = require("../models/venue");
 const bcrypt = require("bcrypt");
+const auth = require('../middleware/auth');
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const adventurers = await Adventurer.find();
     return res.send(adventurers);
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
@@ -27,7 +28,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -51,33 +52,33 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.post("/", async (req, res) => {
-//   try {
-//     const { error } = validateAdventurer(req.body);
-//     if (error) return res.status(400).send(error.details[0].message);
-//     let adventurer = await Adventurer.findOne({ email: req.body.email });
-//     if (adventurer)
-//       return res.status(400).send("Adventurer already registered.");
-//     const adventurer = new Adventurer({
-//       firstName: req.body.firstName,
-//       lastName: req.body.lastName,
-//       email: req.body.email,
-//       password: await bcrypt.hash(req.body.password, salt),
-//       activityList: req.body.activityList,
-//       lodging: req.body.lodging,
-//     });
-//     await adventurer.save();
-//     return res.send({
-//       _id: adventurer._id,
-//       name: adventurer.name,
-//       email: adventurer.email,
-//     });
-//   } catch (ex) {
-//     return res.status(500).send(`Internal Server Error: ${ex}`);
-//   }
-// });
+router.post("/", auth, async (req, res) => {
+  try {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    let adventurer = await Adventurer.findOne({ email: req.body.email });
+    if (adventurer)
+      return res.status(400).send("Adventurer already registered.");
+    adventurer = new Adventurer({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: await bcrypt.hash(req.body.password, salt),
+      activityList: req.body.activityList,
+      lodging: req.body.lodging,
+    });
+    await adventurer.save();
+    const token = adventurer.generateAuthToken();
+    return res
+      .header("x-auth-token", token)
+      .header("access-control-expose-headers", "x-auth-token")
+      .send({ _id: adventurer._id, name: adventurer.name, email: adventurer.email });
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -100,7 +101,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
+router.put("/:id/activityList/:venueId/:activityId", auth, async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
@@ -116,7 +117,7 @@ router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
   }
 });
 
-router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
+router.put("/:id/lodging/:venueId/:lodgingId", auth, async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
@@ -132,7 +133,7 @@ router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const adventurer = await Adventurer.findByIdAndRemove(req.params.id);
     if (!adventurer)

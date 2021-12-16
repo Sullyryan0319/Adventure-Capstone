@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const { activitySchema } = require("./activity");
 const { lodgingSchema } = require("./lodging"); 
+const config = require('config');
+const jwt = require('jsonwebtoken');
 
 const adventurerSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -12,6 +14,11 @@ const adventurerSchema = new mongoose.Schema({
   lodging: { type: [mongoose.Types.ObjectId]}
 
 });
+
+adventurerSchema.methods.generateAuthToken = function () {
+  return jwt.sign({ _id: this._id, name: this.name }, config.get('jwtSecret'));
+ };
+ 
 
 const Adventurer = mongoose.model("Adventurer", adventurerSchema);
 

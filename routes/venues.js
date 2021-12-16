@@ -2,11 +2,12 @@ const { Venue, validate } = require("../models/venue");
 const { Activity, validateActivity } = require("../models/activity");
 const { Lodging, validateLodging } = require("../models/lodging");
 const { Review, validateReview } = require("../models/review");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
+const auth = require('../middleware/auth');
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const venues = await Venue.find();
     return res.send(venues);
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.id);
     if (!venue)
@@ -28,7 +29,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -52,7 +53,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/:venueId/activities", async (req, res) => {
+router.post("/:venueId/activities", auth, async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.venueId);
     if (!venue)
@@ -72,7 +73,7 @@ router.post("/:venueId/activities", async (req, res) => {
   }
 });
 
-router.post("/:venueId/lodginOptions", async (req, res) => {
+router.post("/:venueId/lodginOptions", auth, async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.venueId);
     if (!venue)
@@ -93,7 +94,7 @@ router.post("/:venueId/lodginOptions", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const { error } = validateVenue(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -101,16 +102,20 @@ router.post("/", async (req, res) => {
     if (venue) return res.status(400).send("Venue already registered.");
     venue = new Venue({
       name: req.body.name,
+      password: await bcrypt.hash(req.body.password, salt),
       email: req.body.email,
       password: req.body.password,
     });
     await venue.save();
-    return res.send({ _id: venue._id, name: venue.name, email: venue.email });
+    const token = venue.generateAuthToken();
+    return res
+      .header("x-auth-token", token)
+      .header("access-control-expose-headers", "x-auth-token")
+      .send({ _id: venue._id, name: venue.name, email: venue.email });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
-
 
 // router.post("/:venueId/lodginOptions/reviews", async (req, res) => {
 //   try {
@@ -151,8 +156,7 @@ router.post("/", async (req, res) => {
 //   }
 // });
 
-
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -180,16 +184,16 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    try {
-      const venue = await Venue.findByIdAndRemove(req.params.id);
-      if (!venue)
-        return res
-          .status(400)
-          .send(`The venue with id "${req.params.id}" does not exist.`);
-      return res.send(venue);
-    } catch (ex) {
-      return res.status(500).send(`Internal Server Error: ${ex}`);
-    }
-  });
-  
+  try {
+    const venue = await Venue.findByIdAndRemove(req.params.id);
+    if (!venue)
+      return res
+        .status(400)
+        .send(`The venue with id "${req.params.id}" does not exist.`);
+    return res.send(venue);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 module.exports = router;
