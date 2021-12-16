@@ -46,27 +46,27 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/:id/activityList", async (req, res) => {
-  try {
-    debugger
-    console.log(req.params)
-    const adventurer = await Adventurer.findById(req.params.id);
-    if (!adventurer)
-      return res
-        .status(400)
-        .send(`The adventurer with id "${req.params.id}" does not exist.`);
-    const activity = await Activity.findById(req.body.id);
-    if (!activity)
-      return res
-        .status(400)
-        .send(`The activity with id "${req.body.id}" does not exist.`);
-    adventurer.activityList.push(activity);
-    await adventurer.save();
-    return res.send(adventurer.activityList);
-  } catch (ex) {
-    return res.status(500).send(`Internal Server Error: ${ex}`);
-  }
-});
+// router.post("/:id/activityList", async (req, res) => {
+//   try {
+//     debugger
+//     console.log(req.params)
+//     const adventurer = await Adventurer.findById(req.params.id);
+//     if (!adventurer)
+//       return res
+//         .status(400)
+//         .send(`The adventurer with id "${req.params.id}" does not exist.`);
+//     const activity = await Activity.findById(req.body.id);
+//     if (!activity)
+//       return res
+//         .status(400)
+//         .send(`The activity with id "${req.body.id}" does not exist.`);
+//     adventurer.activityList.push(activity);
+//     await adventurer.save();
+//     return res.send(adventurer.activityList);
+//   } catch (ex) {
+//     return res.status(500).send(`Internal Server Error: ${ex}`);
+//   }
+// });
 
 router.put("/:id", async (req, res) => {
   try {
@@ -95,6 +95,21 @@ router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
     if (!adventurer)
       return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
     adventurer.activityList.push((req.params.activityId))
+
+    await adventurer.save();
+    return res.send(adventurer);
+
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
+  try {
+    const adventurer = await Adventurer.findById(req.params.id)
+    if (!adventurer)
+      return res.status(400).send(`The adventurer with id "${req.params.id}" does not exist.`);
+    adventurer.lodging.push((req.params.lodgingId))
 
     await adventurer.save();
     return res.send(adventurer);
