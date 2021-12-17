@@ -15,7 +15,7 @@ const LoginPage = (props) => {
         props.login(userData);
         event.preventDefault();
 
-        window.location = "/"
+        window.location = "/login"
 
       };
      
