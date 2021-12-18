@@ -4,37 +4,11 @@ import {useNavigate } from "react-router-dom";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-const RegisterForm = () => {
-  const { values, handleChange, handleSubmit, setUser} = useForm(register);
+const RegisterForm = ({user,setUser,register}) => {
+  const { values, handleChange, handleSubmit,} = useForm(register);
   const navigate = useNavigate();
 
-  function register (){
-      alert('Thanks for registering');
-  }
 
-//   const register = async () => {
-//     await axios
-//     .post("http://localhost:5000/api/adventurers", {
-//         firstName: values.firstName,
-//         lastName: values.lastName,
-//         email: values.email,
-//         password: values.password,
-
-//     })
-//     .then((res) => {
-//         localStorage.setItem("token", res.headers["x-auth-token"]);
-//         const user = jwtDecode(localStorage.getItem("token"));
-//         setUser(user);
-//         // navigate("/");
-//         console.log("token", res.headers["x-auth-token"]);
-//       })
-//       .catch(function (error) {
-//         if (error.response) {
-//           console.log(error.response.data);
-//         }
-//       });
-//   };
-  
 
   return (
     <div>
@@ -82,7 +56,9 @@ const RegisterForm = () => {
         <button type="submit">Register</button>
       </form>
     </div>
+    
   );
+
 };
 
 export default RegisterForm;

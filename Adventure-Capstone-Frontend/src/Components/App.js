@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import LoginPage from "./LoginPage/login";
 import AdventurerProfile from "./AdventurerProfile/adventurerProfile";
-import RegisterPage from "./RegisterPage/register";
+import RegisterForm from "./registerPage/RegisterForm";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
@@ -18,6 +18,31 @@ const App = (props) => {
     });
   };
 
+    
+
+  const register = async (values) => {
+    await axios
+    .post("http://localhost:5000/api/adventurers", {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+
+    })
+    .then((res) => {
+        localStorage.setItem("token", res.headers["x-auth-token"]);
+        const user = jwtDecode(localStorage.getItem("token"));
+        setUser(user);
+        navigate("../", {replace:true});
+        console.log("token", res.headers["x-auth-token"]);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response.data);
+        }
+      });
+    }
+
   return (
     <>
       Hello World
@@ -30,7 +55,7 @@ const App = (props) => {
             element={
               <>
                 <LoginPage login={login} user={user} setUser={setUser} />
-                <RegisterPage/>
+                <RegisterForm register={register} user={user} setUser={setUser}/>
               </>
             }
           />
