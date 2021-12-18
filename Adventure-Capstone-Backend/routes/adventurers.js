@@ -28,37 +28,38 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
-  try {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error);
+// router.post("/", async (req, res) => {
+//   try {
+//     const { error } = validate(req.body);
+//     if (error) return res.status(400).send(error);
 
-    const salt = await bcrypt.genSalt(10);
+//     const salt = await bcrypt.genSalt(10);
 
-    const adventurer = new Adventurer({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: await bcrypt.hash(req.body.password, salt),
-      activityList: req.body.activityList,
-      lodging: req.body.lodging,
-    });
+//     const adventurer = new Adventurer({
+//       firstName: req.body.firstName,
+//       lastName: req.body.lastName,
+//       email: req.body.email,
+//       password: await bcrypt.hash(req.body.password, salt),
+//       activityList: req.body.activityList,
+//       lodging: req.body.lodging,
+//     });
 
-    await adventurer.save();
+//     await adventurer.save();
 
-    return res.send(adventurer);
-  } catch (ex) {
-    return res.status(500).send(`Internal Server Error: ${ex}`);
-  }
-});
+//     return res.send(adventurer);
+//   } catch (ex) {
+//     return res.status(500).send(`Internal Server Error: ${ex}`);
+//   }
+// });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     let adventurer = await Adventurer.findOne({ email: req.body.email });
     if (adventurer)
       return res.status(400).send("Adventurer already registered.");
+          const salt = await bcrypt.genSalt(10);
     adventurer = new Adventurer({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -72,7 +73,7 @@ router.post("/", auth, async (req, res) => {
     return res
       .header("x-auth-token", token)
       .header("access-control-expose-headers", "x-auth-token")
-      .send({ _id: adventurer._id, name: adventurer.name, email: adventurer.email });
+      .send(token);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
