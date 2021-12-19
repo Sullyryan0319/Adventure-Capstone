@@ -15,7 +15,7 @@ function validateActivity(activity) {
   const schema = Joi.object({
     description: Joi.string().required(),
     participants: Joi.string(),
-    price: Joi.string()
+    price: Joi.string().required()
   });
   return schema.validate(activity);
 }

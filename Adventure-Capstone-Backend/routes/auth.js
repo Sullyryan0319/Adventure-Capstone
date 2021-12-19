@@ -30,6 +30,7 @@ const router = express.Router();
     const validPassword = await bcrypt.compare(req.body.password, adventurer.password);
     if (!validPassword) return res.status(400).send('Invalid email or password.')
     const token = adventurer.generateAuthToken();
+    console.log("token set");
     
     return res.send(token);
     } catch (ex) {

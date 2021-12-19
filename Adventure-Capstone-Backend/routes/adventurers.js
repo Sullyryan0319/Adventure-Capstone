@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const express = require("express");
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const adventurers = await Adventurer.find();
     return res.send(adventurers);
@@ -79,7 +79,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -102,7 +102,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
-router.put("/:id/activityList/:venueId/:activityId", auth, async (req, res) => {
+router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)
@@ -118,7 +118,7 @@ router.put("/:id/activityList/:venueId/:activityId", auth, async (req, res) => {
   }
 });
 
-router.put("/:id/lodging/:venueId/:lodgingId", auth, async (req, res) => {
+router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
     if (!adventurer)

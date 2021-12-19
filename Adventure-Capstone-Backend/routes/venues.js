@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const express = require("express");
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const venues = await Venue.find();
     return res.send(venues);
@@ -16,7 +16,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.id);
     if (!venue)
@@ -29,7 +29,7 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
@@ -53,7 +53,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-router.post("/:venueId/activities", auth, async (req, res) => {
+router.put("/:venueId/activities", async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.venueId);
     if (!venue)
@@ -73,7 +73,7 @@ router.post("/:venueId/activities", auth, async (req, res) => {
   }
 });
 
-router.post("/:venueId/lodginOptions", auth, async (req, res) => {
+router.put("/:venueId/lodginOptions", auth, async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.venueId);
     if (!venue)
@@ -138,23 +138,23 @@ router.post("/", auth, async (req, res) => {
 //   }
 // });
 
-// router.post("/:venueId/activities/:activityId/reviews", async (req, res) => {
-//   try {
-//     const venue = await Venue.findById(req.params.venueId);
-//     if (!venue)
-//       return res
-//         .status(400)
-//         .send(`The venue with id "${req.params.venueId}" does not exist.`);
-//     const review = new Review({
-//       text: req.body.text,
-//     });
-//     venue.activityId.reviews.push(review);
-//     await venue.save();
-//     return res.send(venue);
-//   } catch (ex) {
-//     return res.status(500).send(`Internal Server Error: ${ex}`);
-//   }
-// });
+router.put("/:venueId/activities/:activityId/reviews", async (req, res) => {
+  try {
+    const venue = await Venue.findById(req.params.venueId);
+    if (!venue)
+      return res
+        .status(400)
+        .send(`The venue with id "${req.params.venueId}" does not exist.`);
+    const review = new Review({
+      text: req.body.text,
+    });
+    venue.activityId.reviews.push(review);
+    await venue.save();
+    return res.send(venue);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
 
 router.put("/:id", auth, async (req, res) => {
   try {
