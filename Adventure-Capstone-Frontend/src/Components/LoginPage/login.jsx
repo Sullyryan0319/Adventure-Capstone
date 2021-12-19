@@ -2,20 +2,21 @@ import React from "react";
 import { Container, Row, Col, FloatingLabel, Form, Button, Modal } from "react-bootstrap";
 import "./login.css";
 
-const LoginPage = (props) => {
-    const user = props.user;
+const LoginPage = ({user, login}) => {
+    const localUser = user;
     const handleSubmit = (event) => {
+      console.log("event = ", event);
         event.preventDefault();
 
         const userData = {
           email: event.target[0].value,
           password: event.target[1].value,
         };
-      
-        props.login(userData);
+      console.log("user data = ", userData);
+        login(userData);
         event.preventDefault();
 
-        window.location = "/login"
+        // window.location = "/login"
 
       };
      
@@ -47,7 +48,7 @@ const LoginPage = (props) => {
               </Form>
             </Modal.Body>
             <Modal.Footer className="d-grid gap-2 mb-5">
-                <p>Not a registered Adventurer or Venue? Register</p>
+                <p>Not a registered Adventurer? Register</p>
             </Modal.Footer>
           </Modal.Dialog>
         </>

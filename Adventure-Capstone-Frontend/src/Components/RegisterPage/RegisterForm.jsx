@@ -20,7 +20,7 @@ const RegisterForm = ({user,setUser,register}) => {
             name="firstName"
             onChange={handleChange}
             value={values.firstName}
-            reqired={true}
+            required={true}
           />
         </label>
         <label>
@@ -30,7 +30,7 @@ const RegisterForm = ({user,setUser,register}) => {
             name="lastName"
             onChange={handleChange}
             value={values.lastName}
-            reqired={true}
+            required={true}
           />
         </label>
         <label>
@@ -40,7 +40,7 @@ const RegisterForm = ({user,setUser,register}) => {
             name="email"
             onChange={handleChange}
             value={values.emailName}
-            reqired={true}
+            required={true}
           />
         </label>
         <label>
@@ -50,7 +50,7 @@ const RegisterForm = ({user,setUser,register}) => {
             name="password"
             onChange={handleChange}
             value={values.password}
-            reqired={true}
+            required={true}
           />
         </label>
         <button type="submit">Register</button>

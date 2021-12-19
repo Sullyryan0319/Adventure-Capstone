@@ -2,7 +2,8 @@ import { Row, Col, Card, Container } from "react-bootstrap/";
 
 
 
-const AdventurerProfile = (props) => {
+const AdventurerProfile = (user) => {
+  alert("user= ", user);
     return (  
       <Col md={3} xs={12}>
         <Card>
@@ -10,8 +11,8 @@ const AdventurerProfile = (props) => {
         <Card.Body>
           <Card.Title>All Who Wander Are Not Lost</Card.Title>
           <Card.Text>
-            First Name: {props.user.firstName}<br/>
-            Last Name: {props.user.lastName}<br/>
+            First Name: {user.firstName}<br/>
+            Last Name: {user.lastName}<br/>
           </Card.Text>
         </Card.Body>
       </Card>
