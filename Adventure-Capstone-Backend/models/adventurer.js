@@ -16,7 +16,7 @@ const adventurerSchema = new mongoose.Schema({
 });
 
 adventurerSchema.methods.generateAuthToken = function () {
-  return jwt.sign({ _id: this._id, firstName: this.firstName, email: this.email, activityList: this.activityList, lodging: this.lodging }, config.get('jwtSecret'));
+  return jwt.sign({ _id: this._id, firstName: this.firstName, lastName: this.lastName, email: this.email, activityList: this.activityList, lodging: this.lodging }, config.get('jwtSecret'));
  };
  
 

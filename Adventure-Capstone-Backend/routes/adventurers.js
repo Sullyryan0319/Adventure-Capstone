@@ -118,6 +118,22 @@ router.put("/:id/activityList/:venueId/:activityId", async (req, res) => {
   }
 });
 
+router.put("/:id/activityList/:activityId", async (req, res) => {
+  try {
+    const adventurer = await Adventurer.findById(req.params.id);
+    if (!adventurer)
+      return res
+        .status(400)
+        .send(`The adventurer with id "${req.params.id}" does not exist.`);
+    adventurer.activityList.push(req.params.activityId);
+
+    await adventurer.save();
+    return res.send(adventurer);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 router.put("/:id/lodging/:venueId/:lodgingId", async (req, res) => {
   try {
     const adventurer = await Adventurer.findById(req.params.id);
