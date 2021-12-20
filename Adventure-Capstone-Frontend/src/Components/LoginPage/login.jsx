@@ -2,8 +2,7 @@ import React from "react";
 import { Container, Row, Col, FloatingLabel, Form, Button, Modal } from "react-bootstrap";
 import "./login.css";
 
-const LoginPage = ({user, login}) => {
-    const localUser = user;
+const LoginPage = ({login}) => {
     const handleSubmit = (event) => {
       console.log("event = ", event);
         event.preventDefault();
