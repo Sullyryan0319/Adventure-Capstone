@@ -111,9 +111,9 @@ const App = (props) => {
 
   return (
     <>
-      <button onClick={() => navigate("/login", { replace: true })}>
+      {/* <button onClick={() => navigate("/login", { replace: true })}>
         Login or Register
-      </button>
+      </button> */}
       <Routes>
         {!user && (
           <Route

@@ -7,15 +7,16 @@ const Logout = (props) => {
   const navigate = useNavigate();
 
 
-  const logout = async (user) => {
+  const logout = async () => {
+    localStorage.removeItem("token");
     setUser(null);
     navigate("../login", { replace: true });
-    localStorage.deleteItem("token");
+    window.location.reload(false);
   };
 
   return (
     <Container>
-            <button onClick={() => logout(user)}>Logout</button>
+            <button onClick={() => logout()}>Logout</button>
 
     </Container>
   );
