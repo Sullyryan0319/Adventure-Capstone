@@ -73,7 +73,7 @@ router.put("/:venueId/activities", async (req, res) => {
   }
 });
 
-router.put("/:venueId/lodginOptions", auth, async (req, res) => {
+router.put("/:venueId/lodging", async (req, res) => {
   try {
     const venue = await Venue.findById(req.params.venueId);
     if (!venue)
@@ -86,7 +86,7 @@ router.put("/:venueId/lodginOptions", auth, async (req, res) => {
       occupancy: req.body.occupancy,
       price: req.body.price,
     });
-    venue.lodgingOptions.push(lodging);
+    venue.lodging.push(lodging);
     await venue.save();
     return res.send(venue);
   } catch (ex) {
