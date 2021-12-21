@@ -12,8 +12,8 @@ const AdventurerProfile = ({user}) => {
         <Card.Img variant="top" src={dude} />
         <Card.Body>
           <Card.Text style={{fontSize: "25px"}}>
-            Adventurer First Name: {user.firstName}<br/>
-            Adventurer Last Name: {user.lastName}<br/>
+            First Name: {user.firstName}<br/>
+            Last Name: {user.lastName}<br/>
           </Card.Text>
         </Card.Body>
       </Card>

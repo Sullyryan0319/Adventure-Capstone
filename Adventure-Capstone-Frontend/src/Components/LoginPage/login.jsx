@@ -23,9 +23,7 @@ const LoginPage = ({login}) => {
     <Container>
       <Row className = "center">
       <Col md={6} xs={12}>
-        <p className="text-white">
-          Welcome back! Adventure awaits!
-        </p>
+       <h2>Welcome back!</h2>
       </Col>
       <Col md={6} xs={12}>
         <>
@@ -47,7 +45,6 @@ const LoginPage = ({login}) => {
               </Form>
             </Modal.Body>
             <Modal.Footer className="d-grid gap-2 mb-5">
-                <p>Not a registered Adventurer? Register</p>
             </Modal.Footer>
           </Modal.Dialog>
         </>

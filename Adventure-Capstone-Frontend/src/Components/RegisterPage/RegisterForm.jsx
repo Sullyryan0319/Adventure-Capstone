@@ -12,6 +12,7 @@ const RegisterForm = ({user,setUser,register}) => {
 
   return (
     <div>
+      <h2>Not a registered Adventurer? Register here</h2>
       <form onSubmit={handleSubmit}>
         <label>
           First Name:

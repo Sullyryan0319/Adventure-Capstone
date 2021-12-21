@@ -111,21 +111,34 @@ const App = (props) => {
 
   return (
     <>
-      {/* <button onClick={() => navigate("/login", { replace: true })}>
-        Login or Register
-      </button> */}
+              <h1 style={{color: "white", alignContent: "center"}}>ROCKY MOUNTAIN EXPEDITIONS</h1>
+
       <Routes>
         {!user && (
           <Route
             path="/login"
             element={
               <>
-                <LoginPage login={login} />
-                <RegisterForm
-                  register={register}
-                  user={user}
-                  setUser={setUser}
-                />
+                <table>
+                <colgroup>
+                    <col style={{ width: "10%", padding: "30px" }} />
+                    <col style={{ width: "50%", padding: "30px" }} />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <td style={{color: "white"}}>
+                        <LoginPage login={login} />
+                      </td>
+                      <td style={{color: "white", width: "80px"}}>
+                        <RegisterForm
+                          register={register}
+                          user={user}
+                          setUser={setUser}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </>
             }
           />
@@ -149,8 +162,18 @@ const App = (props) => {
                       <td>
                         <MapContainer />
                       </td>
-                      <td style={{background: "black", color: "white", textAlign: "left"}}>
-                        {user && <h1 style={{textAlign: "center"}}>{user.firstName + user.lastName}</h1>}
+                      <td
+                        style={{
+                          background: "#7B6442",
+                          color: "white",
+                          textAlign: "left",
+                        }}
+                      >
+                        {user && (
+                          <h1 style={{ textAlign: "center" }}>
+                            {user.firstName}
+                          </h1>
+                        )}
                         <h3>Activity Itinerary</h3>
                         {user &&
                           user?.activityList?.map((activity, i) => (
@@ -165,21 +188,26 @@ const App = (props) => {
                         {user &&
                           user?.lodging?.map((lodging, i) => (
                             <li>
-                              {lodgingOptions.find((l) => l._id === lodging)?.type}
+                              {
+                                lodgingOptions.find((l) => l._id === lodging)
+                                  ?.type
+                              }
                             </li>
                           ))}
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <h1 style={{textAlign: "center", color: "white"}}>Discover Local Venues</h1>
+                        <h1 style={{ textAlign: "center", color: "white" }}>
+                          Discover Local Venues
+                        </h1>
                         <Select
                           placeholder="Pick A Venue"
                           options={venueOptions}
                           onChange={handleVenueChange}
                         />
                       </td>
-                      <td style={{color: "white", padding: "20px" }}>
+                      <td style={{ color: "white", padding: "20px" }}>
                         {selectedVenue && <h1>{selectedVenue.name}</h1>}
                         <h3>Available Activities</h3>
                         {selectedVenue &&
@@ -193,7 +221,7 @@ const App = (props) => {
                           ))}
                       </td>
                       <td>
-                        <Logout/>
+                        <Logout />
                       </td>
                     </tr>
                   </tbody>
