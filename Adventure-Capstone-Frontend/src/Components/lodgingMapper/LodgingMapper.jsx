@@ -1,24 +1,24 @@
-import React from "react";
+// import React from "react";
 
 
-const LodgingMapper = ({lodgingOptions}) => {
+// const LodgingMapper = ({lodgingOptions}) => {
 
-  return (
-    <div>
-      <ul>
-        {lodgingOptions.map((user, i) =>
-          user.lodging.includes(lodging) ? (
-            <li>
-              {" "}        
-              <ul>
-                <li>Lodging: {user.lodging}</li>{" "}
-              </ul>            
-            </li>            
-          ) : null
-        )}
-      </ul>
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <ul>
+//         {lodgingOptions.map((user, i) =>
+//           user.lodging.includes(lodging) ? (
+//             <li>
+//               {" "}        
+//               <ul>
+//                 <li>Lodging: {user.lodging}</li>{" "}
+//               </ul>            
+//             </li>            
+//           ) : null
+//         )}
+//       </ul>
+//     </div>
+//   );
+// };
 
-export default LodgingMapper;
+// export default LodgingMapper;

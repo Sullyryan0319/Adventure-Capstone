@@ -8,10 +8,9 @@ const Logout = (props) => {
 
 
   const logout = async (user) => {
-    console.log(localStorage.getItem("token"));
     setUser(null);
-    navigate("../", { replace: true });
-    console.log(localStorage.getItem("token"));
+    navigate("../login", { replace: true });
+    localStorage.deleteItem("token");
   };
 
   return (

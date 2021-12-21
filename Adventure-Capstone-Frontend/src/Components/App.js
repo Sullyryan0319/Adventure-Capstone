@@ -4,22 +4,23 @@ import LoginPage from "./LoginPage/login";
 import AdventurerProfile from "./AdventurerProfile/adventurerProfile";
 import RegisterForm from "./registerPage/RegisterForm";
 import axios from "axios";
+import "./App.css";
 import jwtDecode from "jwt-decode";
 import Select from "react-select";
-import ActivitiesMapper from "./activitiesMapper/ActivitiesMapper";
 import MapContainer from "./MapContainer/MapContainer";
+import Logout from "./Logout/Logout";
 
 const App = (props) => {
   const [venues, setVenues] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState({});
   const [venueOptions, setVenueOptions] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [lodgingOptions, setLodging] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   const login = async (user) => {
     console.log("user in login =", user);
-    // const v = await getVenues();
 
     console.log("venues in login = ", venues);
 
@@ -69,9 +70,7 @@ const App = (props) => {
   // };
 
   const handleVenueChange = (event) => {
-    console.log("event in handle venue change = ", event.value);
     const venue = venues.filter((v) => v._id === event.value);
-    console.log("venue in handle venue change =", venue[0]);
     setSelectedVenue(venue[0]);
   };
 
@@ -97,13 +96,21 @@ const App = (props) => {
     setActivities(rawActivities);
   };
 
+  const getLodging = async () => {
+    const res = await axios.get(`http://localhost:5000/api/lodgingOptions`);
+    const rawLodging = res.data;
+    setLodging(rawLodging);
+    console.log(rawLodging);
+  };
+
   useEffect(getActivities, []);
 
   useEffect(getVenues, []);
 
+  useEffect(getLodging, []);
+
   return (
     <>
-      Hello World
       <button onClick={() => navigate("/login", { replace: true })}>
         Login or Register
       </button>
@@ -113,7 +120,6 @@ const App = (props) => {
             path="/login"
             element={
               <>
-                <h1>Tester</h1>
                 <LoginPage login={login} />
                 <RegisterForm
                   register={register}
@@ -129,22 +135,22 @@ const App = (props) => {
             path="/"
             element={
               <>
-                <table style={{ width: "100%" }}>
+                <table style={{ width: "100%", border: "2px solid black" }}>
                   <colgroup>
-                    <col style={{ width: "15%", padding: "30px" }} />
-                    <col style={{ width: "70%", padding: "30px" }} />
+                    <col style={{ width: "25%", padding: "30px" }} />
+                    <col style={{ width: "50%", padding: "30px" }} />
                     <col style={{ width: "15%", padding: "30px" }} />
                   </colgroup>
                   <tbody>
                     <tr>
-                      <td>
+                      <td style={{ color: "white", border: "1px solid black" }}>
                         <AdventurerProfile user={user} />
                       </td>
                       <td>
                         <MapContainer />
                       </td>
-                      <td>
-                        {user && <h1>{user.firstName}</h1>}
+                      <td style={{background: "black", color: "white", textAlign: "left"}}>
+                        {user && <h1 style={{textAlign: "center"}}>{user.firstName + user.lastName}</h1>}
                         <h3>Activity Itinerary</h3>
                         {user &&
                           user?.activityList?.map((activity, i) => (
@@ -158,19 +164,22 @@ const App = (props) => {
                         <h3>Lodging</h3>
                         {user &&
                           user?.lodging?.map((lodging, i) => (
-                            <li>{lodging.type}</li>
+                            <li>
+                              {lodgingOptions.find((l) => l._id === lodging)?.type}
+                            </li>
                           ))}
                       </td>
                     </tr>
                     <tr>
                       <td>
+                        <h1 style={{textAlign: "center", color: "white"}}>Discover Local Venues</h1>
                         <Select
                           placeholder="Pick A Venue"
                           options={venueOptions}
                           onChange={handleVenueChange}
                         />
                       </td>
-                      <td>
+                      <td style={{color: "white", padding: "20px" }}>
                         {selectedVenue && <h1>{selectedVenue.name}</h1>}
                         <h3>Available Activities</h3>
                         {selectedVenue &&
@@ -182,6 +191,9 @@ const App = (props) => {
                           selectedVenue?.lodging?.map((lodging, i) => (
                             <li>{lodging.type}</li>
                           ))}
+                      </td>
+                      <td>
+                        <Logout/>
                       </td>
                     </tr>
                   </tbody>
