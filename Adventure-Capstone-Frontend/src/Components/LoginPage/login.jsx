@@ -4,18 +4,15 @@ import "./login.css";
 
 const LoginPage = ({login}) => {
     const handleSubmit = (event) => {
-      console.log("event = ", event);
         event.preventDefault();
 
         const userData = {
           email: event.target[0].value,
           password: event.target[1].value,
         };
-      console.log("user data = ", userData);
         login(userData);
         event.preventDefault();
 
-        // window.location = "/login"
 
       };
      
@@ -34,7 +31,7 @@ const LoginPage = ({login}) => {
                 <Form.Control type="email" placeholder="name@example.com" />
               </FloatingLabel>
               <FloatingLabel controlId="password" label="Password" className="mb-3">
-                <Form.Control type="string" placeholder="Password" />
+                <Form.Control type="password" placeholder="Password" />
               </FloatingLabel>
 
               <div className="d-grid gap-2">

@@ -12,7 +12,7 @@ const RegisterForm = ({user,setUser,register}) => {
 
   return (
     <div>
-      <h2>Not a registered Adventurer? Register here</h2>
+      <h2>Not a registered Adventurer? Register here.</h2>
       <form onSubmit={handleSubmit}>
         <label>
           First Name:
@@ -47,7 +47,7 @@ const RegisterForm = ({user,setUser,register}) => {
         <label>
           Password:
           <input
-            type="string"
+            type="password"
             name="password"
             onChange={handleChange}
             value={values.password}

@@ -20,24 +20,18 @@ const App = (props) => {
   const navigate = useNavigate();
 
   const login = async (user) => {
-    console.log("user in login =", user);
 
-    console.log("venues in login = ", venues);
 
     await axios.post(`http://localhost:5000/api/auth`, user).then((res) => {
       localStorage.setItem("token", res.data);
-      console.log("set token");
       const user = jwtDecode(localStorage.getItem("token"));
-      console.log("user after jwt decode = ", user);
       setUser(user);
       navigate("../", { replace: true });
     });
   };
 
   const logout = async (user) => {
-    console.log(localStorage.getItem("token"));
     setUser(null);
-    console.log(localStorage.getItem("token"));
   };
 
   const register = async (values) => {
@@ -54,7 +48,6 @@ const App = (props) => {
         setUser(user);
         getVenues();
         navigate("../", { replace: true });
-        console.log("token", res.headers["x-auth-token"]);
       })
       .catch(function (error) {
         if (error.response) {
@@ -75,10 +68,8 @@ const App = (props) => {
   };
 
   const getVenues = async () => {
-    console.log("entered get venues");
 
     const res = await axios.get(`http://localhost:5000/api/venues`);
-    console.log("data in get venues = ", res.data);
     const rawVenues = res.data;
     setVenues(rawVenues);
     const venueOptions = rawVenues.map((venue, i) => {
@@ -100,7 +91,6 @@ const App = (props) => {
     const res = await axios.get(`http://localhost:5000/api/lodgingOptions`);
     const rawLodging = res.data;
     setLodging(rawLodging);
-    console.log(rawLodging);
   };
 
   useEffect(getActivities, []);
